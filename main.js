@@ -1,7 +1,8 @@
 'use strict';
 
 const db = require('./db.js');
-const server = require('./http.js');
+const server = require('./ws.js');
+const staticServer = require('./static.js');
 
 const routing = {
   user: require('./user.js'),
@@ -9,4 +10,5 @@ const routing = {
   city: db('city')
 }
 
-server(routing, 8000);
+staticServer('./static', 8000);
+server(routing, 8001);
