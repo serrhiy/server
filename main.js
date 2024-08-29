@@ -13,7 +13,7 @@ const receiveArgs = async (request) => {
 const PORT = 8000;
 
 const routing = {
-  users: db('users'),
+  user: require('./user.js'),
   country: db('country'),
   city: db('city')
 }

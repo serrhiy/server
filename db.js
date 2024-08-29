@@ -24,9 +24,10 @@ module.exports = (table) => ({
     return await pool.query(sql, values);
   },
 
-  read: async (id) => {
-    if (!id) return await pool.query(`SELECT * FROM ${table}`);
-    const sql = `SELECT * FROM ${table} WHERE id = $1`;
+  read: async (id, fields = ['*']) => {
+    const names = fields.join(',');
+    if (!id) return await pool.query(`SELECT ${names} FROM ${table}`);
+    const sql = `SELECT ${names} FROM ${table} WHERE id = $1`;
     return await pool.query(sql, [id]);
   },
 
