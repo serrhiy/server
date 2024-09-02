@@ -3,6 +3,7 @@
 const db = require('./db.js');
 const server = require('./ws.js');
 const staticServer = require('./static.js');
+const config = require('./config.js');
 
 const routing = {
   user: require('./user.js'),
@@ -10,5 +11,5 @@ const routing = {
   city: db('city')
 }
 
-staticServer('./static', 8000);
-server(routing, 8001);
+staticServer('./static', config.HTTP_PORT);
+server(routing, config.WS_PORT);

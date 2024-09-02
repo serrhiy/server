@@ -2,13 +2,13 @@
 
 const ws = new WebSocket('ws://127.0.0.1:8001/');
 
-const scaffold = (strcuture) => {
+const scaffold = (structure) => {
   const api = {};
-  for (const [entity, methods] of Object.entries(strcuture)) {
+  for (const [entity, methods] of Object.entries(structure)) {
     const functions = {};
     for (const method of methods) {
       functions[method] = (...args) => new Promise((resolve) => {
-        const packet = { entity, name: method, args };
+        const packet = { entity, method, args };
         ws.send(JSON.stringify(packet));
         ws.onmessage = (message) => resolve(JSON.parse(message.data));
       });
@@ -18,12 +18,13 @@ const scaffold = (strcuture) => {
   return api;
 };
 
-const api = scaffold({
+const structure = {
   user: ['create', 'read', 'update', 'delete'],
-});
+};
+
+const api = scaffold(structure);
 
 ws.addEventListener('open', async () => {
-  const user1 = await api.user.read(1);
-  const user2 = await api.user.read(2);
-  console.log({ user1, user2 });
+  const users = await api.user.read();
+  console.log({ users });
 });

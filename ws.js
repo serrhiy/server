@@ -1,21 +1,19 @@
 'use strict';
 
-const { Server } = require('ws');
+const ws = require('ws');
 
 module.exports = (routing, port) => {
-  const ws = new Server({ port });
-  ws.on('connection', (connection) => {
-    connection.on('message', async (message) => {
-      const json = JSON.parse(message);
-      const { entity, name, args = [] } = json;
-      const handler = routing[entity]?.[name];
-      if (!handler) connection.send('"Not Found"', { binary: false });
-      try {
-        const answer = await handler(...args);
-        connection.send(JSON.stringify(answer.rows), { binary: false });
-      } catch {
-        connection.send('"Server Error"');
+  const server = new ws.Server({ port });
+  server.on('connection', (socket, request) => {
+    socket.on('message', async (data) => {
+      const json = JSON.parse(data);
+      const { entity, method, args = [] } = json;
+      const handler = routing[entity]?.[method];
+      if (!handler) {
+        return void socket.send('"Not Found"', { binary: false });
       }
+      const response = await handler(...args);
+      socket.send(JSON.stringify(response.rows), { binary: false }); 
     });
   });
 };
