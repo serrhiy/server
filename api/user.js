@@ -1,7 +1,7 @@
 'use strict';
 
-const db = require('./db.js');
-const hash = require('./hash.js');
+const db = require('../db.js');
+const hash = require('../hash.js');
 
 const user = db('users');
 

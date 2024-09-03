@@ -20,11 +20,15 @@ const scaffold = (structure) => {
 
 const structure = {
   user: ['create', 'read', 'update', 'delete'],
+  country: ['create', 'read', 'update', 'delete'],
+  city: ['create', 'read', 'update', 'delete'],
 };
 
 const api = scaffold(structure);
 
 ws.addEventListener('open', async () => {
   const users = await api.user.read();
-  console.log({ users });
+  const cities = await api.city.read();
+  const countries = await api.country.read();
+  console.log({ users, cities, countries });
 });
