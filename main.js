@@ -4,12 +4,15 @@ const server = require('./ws.js');
 const staticServer = require('./static.js');
 const config = require('./config.js');
 const path = require('node:path');
-const fsp = require('node:fs/promises');
+const fs = require('node:fs');
 const load = require('./load.js');
+const Logger = require('./logger/logger.js');
+const fsp = fs.promises;
 
 const sandbox = {
   db: require('./db.js'),
   common: { hash: require('./hash.js'), },
+  logger: new Logger(fs.createWriteStream('./logs/log')),
 };
 
 
